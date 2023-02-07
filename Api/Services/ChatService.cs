@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Api.Services
 {
@@ -22,6 +24,52 @@ namespace Api.Services
                 return true;
             }
 
+        }
+
+        public void AddUserConnectionId(string user, string connectionId)
+        {
+            lock(Users)
+            {
+                if (Users.ContainsKey(user)) 
+                {
+                    Users[user] = connectionId;
+                }
+            }
+        }
+
+        public string GetUserByConnectionId(string connectionId)
+        {
+            lock(Users)
+            {
+                return Users.Where(x => x.Value == connectionId).Select(x => x.Key).FirstOrDefault();
+            }
+        }
+
+        public string GetConnectionIdByUser(string user)
+        {
+            lock (Users)
+            {
+                return Users.Where(x => x.Key == user).Select(x => x.Value).FirstOrDefault();
+            }
+        }
+
+        public void RemoveUser(string user)
+        {
+            lock(Users)
+            {
+                if(Users.ContainsKey(user))
+                { 
+                    Users.Remove(user);
+                }
+            }
+        }
+
+        public string[] GetOnlineUsers()
+        {
+            lock (Users)
+            {
+                return Users.OrderBy(x => x.Key).Select(x => x.Key).ToArray();
+            }
         }
     }
 }
