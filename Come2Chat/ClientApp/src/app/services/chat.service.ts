@@ -8,10 +8,10 @@ import { User } from '../models/user';
 })
 export class ChatService {
   myName: string = '';
-  
+
   constructor(private httpClient: HttpClient) { }
 
-  registerUser(user: User){
+  registerUser(user: User) {
     return this.httpClient.post(`${environment.apiUrl}api/chat/register-user`, user, {responseType:'text'});
   }
 }

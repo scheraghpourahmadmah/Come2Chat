@@ -10,7 +10,7 @@ import { ChatService } from '../services/chat.service';
 export class HomeComponent implements OnInit {
   userForm: FormGroup = new FormGroup({});
   submitted = false;
-  apiErrorMessages: string[] =[];
+  apiErrorMessages: string[] = [];
   openChat = true;
 
   constructor(private formBuilder: FormBuilder, private chatService: ChatService) { }
@@ -19,26 +19,26 @@ export class HomeComponent implements OnInit {
     this.initialzeForm();
   }
 
-  initialzeForm(){
+  initialzeForm() {
     this.userForm = this.formBuilder.group({
-      name: ['',[Validators.required, Validators.minLength(3), Validators.maxLength(15)]]
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]]
     })
   }
 
-  submitForm(){
+  submitForm() {
     this.submitted = true;
     this.apiErrorMessages = [];
 
-    if(this.userForm.valid){
+    if (this.userForm.valid) {
       this.chatService.registerUser(this.userForm.value).subscribe({
-        next:() =>{
+        next: () => {
           this.chatService.myName = this.userForm.get('name')?.value;
           this.openChat = true;
           this.userForm.reset();
           this.submitted = false;
         },
-        error: error =>{
-          if(typeof (error.error) !== 'object'){
+        error: error => {
+          if (typeof (error.error) !== 'object') {
             this.apiErrorMessages.push(error.error);
           }
         }
@@ -49,5 +49,4 @@ export class HomeComponent implements OnInit {
   closeChat() {
     this.openChat = false;
   }
-
 }
