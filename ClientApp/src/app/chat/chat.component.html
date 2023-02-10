@@ -11,19 +11,11 @@
         <div class="card border-secondary mb-3">
             <div class="card-header h3 text-muted text-center">Users</div>
             <div class="card-body" style="min-height: 555px;">
-                <div class="row mt-1">
+                <div class="row mt-1" *ngFor="let user of chatService.onlineUsers">
                     <div class="col">
                         <div class="d-grid">
                             <button type="button"
-                                class="btn btn-success card-text btn-block">{{chatService.myName}}</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mt-1">
-                    <div class="col">
-                        <div class="d-grid">
-                            <button type="button" class="btn btn-dark card-text btn-block">User2</button>
+                                class="btn btn-success card-text btn-block">{{user}}</button>
                         </div>
                     </div>
                 </div>
