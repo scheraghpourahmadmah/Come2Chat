@@ -9,7 +9,6 @@ namespace Api.Hubs
     public class ChatHub : Hub
     {
         private readonly ChatService _chatService;
-
         public ChatHub(ChatService chatService)
         {
             _chatService = chatService;
@@ -28,12 +27,12 @@ namespace Api.Hubs
             _chatService.RemoveUserFromList(user);
             await DisplayOnlineUsers();
 
-            await base.OnDisconnectedAsync(exception); ;
+            await base.OnDisconnectedAsync(exception);
         }
 
-        public async Task AddUserConnectionId (string name)
+        public async Task AddUserConnectionId(string name)
         {
-            _chatService.AddUserConnectionId(name, Context.ConnectionId);
+            _chatService.AddUserConnectinId(name, Context.ConnectionId);
             await DisplayOnlineUsers();
         }
 
@@ -47,8 +46,9 @@ namespace Api.Hubs
             string privateGroupName = GetPrivateGroupName(message.From, message.To);
             await Groups.AddToGroupAsync(Context.ConnectionId, privateGroupName);
             var toConnectionId = _chatService.GetConnectionIdByUser(message.To);
-            
-            //opening private chatbox for the other end user
+            await Groups.AddToGroupAsync(toConnectionId, privateGroupName);
+
+            // opening private chatbox for the other end user
             await Clients.Client(toConnectionId).SendAsync("OpenPrivateChat", message);
         }
 
@@ -61,12 +61,13 @@ namespace Api.Hubs
         public async Task RemovePrivateChat(string from, string to)
         {
             string privateGroupName = GetPrivateGroupName(from, to);
-            await Clients.Group(privateGroupName).SendAsync("ClosePrivateChat");
+            await Clients.Group(privateGroupName).SendAsync("CloseProivateChat");
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, privateGroupName);
             var toConnectionId = _chatService.GetConnectionIdByUser(to);
             await Groups.RemoveFromGroupAsync(toConnectionId, privateGroupName);
         }
+
         private async Task DisplayOnlineUsers()
         {
             var onlineUsers = _chatService.GetOnlineUsers();
@@ -75,9 +76,9 @@ namespace Api.Hubs
 
         private string GetPrivateGroupName(string from, string to)
         {
-            // from: john, to: david "david-john"
+            // from: john, to: david  "david-john"
             var stringCompare = string.CompareOrdinal(from, to) < 0;
-            return stringCompare ? $"{from}-{to}" : $"{to}-{from} ";
+            return stringCompare ? $"{from}-{to}" : $"{to}-{from}";
         }
     }
 }

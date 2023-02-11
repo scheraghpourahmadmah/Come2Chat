@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   userForm: FormGroup = new FormGroup({});
   submitted = false;
   apiErrorMessages: string[] =[];
-  openChat = true;
+  openChat = false;
 
   constructor(private formBuilder: FormBuilder, private chatService: ChatService) { }
 

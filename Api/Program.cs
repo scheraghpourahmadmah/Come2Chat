@@ -24,8 +24,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
 
 app.MapHub<ChatHub>("/hubs/chat");
+app.MapFallbackToController("Index", "Fallback");
 
 app.Run();

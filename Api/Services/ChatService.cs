@@ -1,36 +1,35 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 
 namespace Api.Services
 {
     public class ChatService
     {
-        // Key , Value eg: { {"john", "asdsah!@12321"}, {"david", "ajsdhsaj2312"}}
+        // Key, Value eg: { {"john", "asdsah!@12321"}, {"david", "ajsdhsaj2312"}}
         private static readonly Dictionary<string, string> Users = new Dictionary<string, string>();
 
         public bool AddUserToList(string userToAdd)
         {
-            lock(Users)
+            lock (Users)
             {
-                foreach(var user in Users)
+                foreach (var user in Users)
                 {
-                    if(user.Key.ToLower() == userToAdd.ToLower())
+                    if (user.Key.ToLower() == userToAdd.ToLower())
                     {
                         return false;
                     }
                 }
+
                 Users.Add(userToAdd, null);
                 return true;
             }
-
         }
 
-        public void AddUserConnectionId(string user, string connectionId)
+        public void AddUserConnectinId(string user, string connectionId)
         {
-            lock(Users)
+            lock (Users)
             {
-                if (Users.ContainsKey(user)) 
+                if (Users.ContainsKey(user))
                 {
                     Users[user] = connectionId;
                 }
@@ -39,7 +38,7 @@ namespace Api.Services
 
         public string GetUserByConnectionId(string connectionId)
         {
-            lock(Users)
+            lock (Users)
             {
                 return Users.Where(x => x.Value == connectionId).Select(x => x.Key).FirstOrDefault();
             }
@@ -55,10 +54,10 @@ namespace Api.Services
 
         public void RemoveUserFromList(string user)
         {
-            lock(Users)
+            lock (Users)
             {
-                if(Users.ContainsKey(user))
-                { 
+                if (Users.ContainsKey(user))
+                {
                     Users.Remove(user);
                 }
             }
@@ -73,3 +72,4 @@ namespace Api.Services
         }
     }
 }
+
