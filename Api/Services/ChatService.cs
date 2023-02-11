@@ -53,7 +53,7 @@ namespace Api.Services
             }
         }
 
-        public void RemoveUser(string user)
+        public void RemoveUserFromList(string user)
         {
             lock(Users)
             {
